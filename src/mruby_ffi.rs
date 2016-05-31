@@ -229,6 +229,8 @@ extern "C" {
     pub fn mrb_open() -> *const MrState;
     pub fn mrb_close(mrb: *const MrState);
 
+    pub fn mrb_top_self(mrb: *const MrState) -> MrValue;
+
     #[inline]
     pub fn mrb_ext_get_ud(mrb: *const MrState) -> *const u8;
     #[inline]

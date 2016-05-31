@@ -793,6 +793,8 @@ pub trait MrubyImpl {
     /// ```
     fn class_name_for<T: Any>(&self) -> Result<String, MrubyError>;
 
+    fn top_self(&self) -> Value;
+
     /// Creates mruby `Value` `nil`.
     ///
     /// # Examples
@@ -1452,6 +1454,17 @@ impl MrubyImpl for MrubyType {
         match borrow.classes.get(&TypeId::of::<T>()) {
             Some(class) => Ok(class.2.clone()),
             None        => Err(MrubyError::Undef)
+        }
+    }
+
+    #[inline]
+    fn top_self(&self) -> Value {
+        unsafe {
+            let mrb = self.borrow().mrb;
+
+            let value = mrb_top_self(mrb);
+
+            Value::new(self.clone(), value)
         }
     }
 
